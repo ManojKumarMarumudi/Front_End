@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async_and_Await</title>
+<style>
+    body{
+        text-align: center;
+        background-color: rgb(226, 239, 247);
+    }
+</style>
+
+</head>
+<body>
+    <h1>School Information</h1>
+
+    <div id = "schoolInfo"></div>
+
+    <h2>Select Student By ID</h2>
+    <select id="studentSelect"><option value="">Select ID</option></select>
+
+    <div id = "studentInfo"></div>
+
+    <script>
+        async function loadData(){
+            const res = await fetch('data.json');
+
+            const objData = await res.json(); 
+
+            schoolInfo.innerHTML = 
+                `<p><b> School Name : </b> ${objData.school_Name}</p>
+                <p><b> Class : </b> ${objData.class}</p>
+                <p><b> President : </b> ${objData.info.president}</p>
+                <p><b> Address : </b> ${objData.info.address}</p>
+                <p><b> Email : </b> ${objData.info.contacts.email}</p>
+                <p><b> Telephone : </b> ${objData.info.contacts.tel}</p>`
+                ;
+
+            objData.students.forEach(s => studentSelect.innerHTML+=`<option>${s.id}</option>`);
+            
+            studentSelect.onchange=()=>{
+                let s = objData.students.find(x=>x.id===studentSelect.value);
+                    studentInfo.innerHTML=s?`
+                <p><b>Name : </b>${s.name}</p>
+                <p><b><u>Grades</u></b></p>
+                <p><b>Math : </b>${s.grade.math}</p> 
+                <p><b>Physics : </b>${s.grade.physics}</p> 
+                <p><b>Chemistry : </b>${s.grade.chemistry}</p> ` : "";
+            };
+
+
+        }
+        loadData();
+
+    </script>
+
+</body>
+</html>
